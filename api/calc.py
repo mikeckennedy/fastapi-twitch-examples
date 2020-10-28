@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional
 
 import fastapi
@@ -6,26 +7,30 @@ import pydantic
 router = fastapi.APIRouter()
 
 
-class Vector:
+class Vector(pydantic.BaseModel):
     x: int
     y: int
     z: Optional[int] = None
 
 
 class Result(pydantic.BaseModel):
-    product: int
+    result: int
     x: int
     y: int
     z: Optional[int]
 
 
 @router.get('/api/calculate')
-def calculate(x: int, y: int, z: Optional[int] = None):
+async def calculate(x: int, y: int, z: Optional[int] = None):
+    # https://github.com/encode/httpx
+    # await Calling twitch api
+    # await saving to db
+    # await asyncio.sleep(.001)
     prod = x * y
     if z:
         prod *= z
 
-    return Result(product=prod, x=x, y=y, z=z)
+    return Result(result=prod, x=x, y=y, z=z)
 
 
 @router.post('/api/sum')
@@ -34,6 +39,4 @@ def sum_it(v: Vector):
     if v.z:
         addition += v.z
 
-    p = Result(product=addition, x=v.x, y=v.y, z=v.z)
-
-    return p
+    return Result(result=addition, x=v.x, y=v.y, z=v.z)
