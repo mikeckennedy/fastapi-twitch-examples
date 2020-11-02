@@ -28,7 +28,7 @@ async def calculate(x: int, y: int, z: Optional[int] = None):
     # await asyncio.sleep(.001)
     prod = x * y
     if z:
-        prod *= z
+        prod *= z * 10
 
     return Result(result=prod, x=x, y=y, z=z)
 
